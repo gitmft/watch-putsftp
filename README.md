@@ -3,7 +3,7 @@ Description
 
 watch-putsfp is a smart JavaScript [node.js](http://nodejs.org/) sftp client CLI that listens for changes on local folders then uploads the file to an sFTP server. 
 
-It uses the node packages[chokidar](https://github.com/paulmillr/chokidar) and [ssh2](https://github.com/mscdex/ssh2) for file watching and sFTP file delivery respectively.
+It uses the node packages [chokidar](https://github.com/paulmillr/chokidar) and [ssh2](https://github.com/mscdex/ssh2) for file watching and sFTP file delivery respectively.
 
 
 Requirements
@@ -151,6 +151,7 @@ bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Vol
 2016-03-25T22:21:19.780Z: Progress: /clarkkent/uploads/watch-putsftp.pdf.partial TotalTx:98304 Chunk:32768 Total:1363635
 2016-03-25T22:21:19.858Z: Progress: /clarkkent/uploads/watch-putsftp.pdf.partial TotalTx:131072 Chunk:32768 Total:1363635
 2016-03-25T22:21:19.875Z: Progress: /clarkkent/uploads/watch-putsftp.pdf.partial TotalTx:163840 Chunk:32768 Total:1363635
+```
 
 Tests
 ===
