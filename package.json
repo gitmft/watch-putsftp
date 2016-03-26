@@ -1,0 +1,29 @@
+{
+  "name": "watch-putsftp",
+  "version": "1.0.0",
+  "description": "Watch a Folder and SFTP Put it to a server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitmft/watch-putsftp"
+  },
+  "keywords": [
+    "mft",
+    "watch",
+    "sftp"
+  ],
+  "author": "Dave Berry <obigfiles@gmail.com> (https://github.com/gitmft)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gitmft/watch-putsftp/issues"
+  },
+  "homepage": "https://github.com/gitmft/watch-putsftp",
+  "dependencies": {
+    "chokidar": "^1.4.3",
+    "ssh2": "^0.5.0",
+    "yargs": "^4.3.2"
+  }
+}
