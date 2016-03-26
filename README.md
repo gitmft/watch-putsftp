@@ -33,7 +33,7 @@ Client Examples
 
 * Display help and command line options 
 
-```javascript
+```
 mode .
 Usage: node index.js -putsftp.js: -u <SFTP_USER> -a <SFTP_PASSWORD> -k
 <SFTP_KEY> -h <SFTP_HOST> -p <SFTP_PORT> -r <SFTP_FOLDER> -l <WATCH_FOLDER>  -v
@@ -56,22 +56,22 @@ Examples:
   MyPassword -k /tmp/sftpkey -h localhost
   -p 7522 -r /uploads -l /tmp/mft/watch/
   -r /uploads/ -v 1 -s false
-```javascript
+```
 
 * Listen on Disk WatchDisk and publish to localhost sFTP server with minimal auditing
 
-```javascript
+```
 bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Volumes/WatchDisk/ -r /clarkkent/uploads/
 2016-03-25T21:48:35.976Z: Connecting to sFTP Server
 2016-03-25T21:48:37.747Z: sftp: ready
 2016-03-25T21:48:37.813Z: watcher ready: 
 2016-03-25T21:49:14.953Z: upload sftp successful /Volumes/WatchDisk/package.json /clarkkent/uploads/package.json
-```javascript
+```
 
 
 * Automatic error handling and retry when server goes down and comes back up
 
-```javascript
+```
 bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Volumes/WatchDisk/ -r /clarkkent/uploads/
 2016-03-25T21:48:35.976Z: Connecting to sFTP Server
 2016-03-25T21:48:37.747Z: sftp: ready
@@ -86,11 +86,11 @@ bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Vol
 2016-03-25T21:51:36.487Z: sftp: ready
 2016-03-25T21:51:36.500Z: watcher ready: 
 2016-03-25T21:51:37.781Z: upload sftp successful /Volumes/WatchDisk/package.json /clarkkent/uploads/package.json
-```javascript
+```
 
 * More verbose output with -v 3 flag
 
-```javascript
+```
 bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Volumes/WatchDisk/ -r /clarkkent/uploads/ -v 3
 2016-03-25T22:01:50.918Z: Connecting to sFTP Server
 2016-03-25T22:01:52.145Z: sftp: ready
@@ -115,11 +115,11 @@ bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Vol
 2016-03-25T22:02:04.104Z: watcher raw: change /Volumes/WatchDisk/package.json
 2016-03-25T22:02:04.177Z: watcher raw: change /Volumes/WatchDisk
 2016-03-25T22:02:04.207Z: watcher unlink event: file deleted /Volumes/WatchDisk/package.json
-```javascript
+```
 
 * Even more verbose output including SFTP DEBUG with -v 5 flag
 
-```javascript
+```
 bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Volumes/WatchDisk/ -r /clarkkent/uploads/ -v 5
 2016-03-25T22:17:03.904Z: Connecting to sFTP Server
 2016-03-25T22:17:03.929Z: sftpDebug: DEBUG: Local ident: 'SSH-2.0-ssh2js0.1.0'
@@ -137,11 +137,11 @@ bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Vol
 2016-03-25T22:17:04.134Z: sftpDebug: DEBUG: Parser: IN_PACKETDATAAFTER, packet: KEXINIT
 2016-03-25T22:17:04.140Z: sftpDebug: DEBUG: Comparing KEXINITs ...
 ...
-```javascript
+```
 
 * File upload progress with -s flag
 
-```javascript
+```
 bash-3.2$ node index.js -u clarkkent -k sftpkey -h localhost -r /uploads -l /Volumes/WatchDisk/ -r /clarkkent/uploads/ -s
 2016-03-25T22:21:11.128Z: Connecting to sFTP Server
 2016-03-25T22:21:12.444Z: sftp: ready
@@ -160,7 +160,7 @@ Tests
 ** test/sftplist.js to test file list
 ** test/sftpput.js to test file put
 
-```javascript
+```
 bash-3.2$ node test/sftpconn.js 
 Usage: node sftpconn.js USERNAME PASSWORD KEYLOCATION HOSTNAME PORT
 bash-3.2$ node test/sftplist.js 
@@ -168,7 +168,7 @@ Usage: node sftplist.js "." USERNAME PASSWORD KEYLOCATION HOSTNAME PORT
 bash-3.2$ node test/sftpput.js 
 Usage: node sftpput.js index.js "." USERNAME PASSWORD KEYLOCATION HOSTNAME PORT
 bash-3.2$ 
-```javascript
+```
 
 TODO
 ===
