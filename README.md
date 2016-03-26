@@ -11,7 +11,6 @@ Requirements
 
 * [node.js](http://nodejs.org/) -- v0.10 or newer
 
-
 Install
 =======
 
