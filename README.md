@@ -28,6 +28,80 @@ Features
 * sftp DEBUG option with -v 5 flag
 * Auto rename on server using .partial suffix
 
+
+Configuration
+============
+
+* Global config for this app
+
+```
+var myopts = {
+  watchdir: '/tmp/mft/watch',  // -l flag
+  remotedir: '',                 // -r flag
+  partial: '.partial',         // write files with .partial suffix then rename
+  deleteOnRename: true,        // delete original file if rename is used
+  privatekey: '',
+  verifyRemotedir: true,       // verify remotedir on db ready event
+  conncnt: 0,
+  connerr: '',
+  conn: null,
+  retryInterval: 30000         // retry 30 seconds if server goes down
+};
+```
+
+* Default config for [ssh2](https://github.com/mscdex/ssh2)
+[chokidar](https://github.com/paulmillr/chokidar) and [ssh2](https://github.com/mscdex/ssh2)
+
+```
+var sftpopts = {
+  host: 'localhost',         // -h flag
+  port: 22,                  // -p flag
+  username: '',              // -u flag
+  password: '',
+  keepaliveInterval: 10000,
+  keepaliveCountMax: 50,
+  concurrency: 10,
+  debug: sftpDebug,          // -v 5 flag
+  // these settings are required for older products not supporting newer algos 
+  algorithms: {
+    kex: ['diffie-hellman-group1-sha1',
+          'ecdh-sha2-nistp256',
+          'ecdh-sha2-nistp384',
+          'ecdh-sha2-nistp521',
+          'diffie-hellman-group-exchange-sha256',
+          'diffie-hellman-group14-sha1'],
+    cipher: ['aes128-cbc',
+          '3des-cbc','blowfish-cbc',
+          'aes128-ctr','aes192-ctr',
+          'aes256-ctr','aes128-gcm',
+          'aes128-gcm@openssh.com',
+          'aes256-gcm',
+          'aes256-gcm@openssh.com'],
+  },
+
+  privateKey: ''            // -k flag
+  };
+```
+
+* Default config for [chokidar](https://github.com/paulmillr/chokidar)
+
+```
+var watchopts = {
+  ignored: /[\/\\]\./,    // ignore files atrting with '.'
+  ignoreInitial: false,   // process existing files at start
+  followSymlinks: false,
+  persistent: true,
+  depth: 0,               // ignore subdirs 
+  awaitWriteFinish: { stabilityThreshold:2000, pollInterval: 100},
+  alwaysStat: true,
+  usePolling: true,       // use portable polling option
+  interval: 100,
+  binaryInterval: 300,
+  ignorePermissionErrors: false,
+  atomic: true
+};
+```
+
 Client Examples
 ===============
 
@@ -174,11 +248,14 @@ bash-3.2$
 TODO
 ===
 
-* Propogate subfolders to server
+* Add pgp encryption
 * Notification via email and/or [node-notifier] (https://www.npmjs.com/package/node-notifier)
+* Add more formal tests
+* Propogate subfolders to server
+  NOTE: it s very easy and light weigth to just start another instance
 * other?
 
-## Contributing
+## Consider Contributing
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -188,7 +265,7 @@ TODO
 
 ## History
 
-Created: May 6, 2015
+Created: March 24, 2016
 
 ## Credits
 

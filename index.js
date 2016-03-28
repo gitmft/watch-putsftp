@@ -10,6 +10,7 @@ var myopts = {
   partial: '.partial',
   deleteOnRename: true,
   privatekey: '',
+  verifyRemotedir: true,
   conncnt: 0,
   connerr: '',
   conn: null,
@@ -185,6 +186,25 @@ function main(cb) {
     myopts.connerr = '';
     myopts.conncnt = 0;
 
+  if (myopts.verifyRemotedir === true) {
+    myopts.verifyRemotedir=false;
+     myopts.conn.sftp(function(err, sftpstream) {
+        if (err) {
+          log(0, 'main sftp ERROR: ' +err);
+          return cb(err);
+        } else {
+          isDir(myopts.remotedir, sftpstream, function(err) {
+            if (err) {
+              var merr = 'upload sftp ERROR: ' +myopts.remotedir +' is not a directory ' +err;
+              log(0, merr);
+		process.exit(1); // get outta here
+               throw err;
+            };
+          });
+        };
+      });
+    };
+
     startWatching(function(err) {
       log(3, ' main istartWatching returned');
       //never reached in current implementation
@@ -274,22 +294,17 @@ function rename(src, dest, stream, cb) {
   });
 };
 
-/* DOESNT WORK WITH FASTPUT
-// opendir(< string >path, < function >callback) - boolean - Opens a directory path. Returns false
-// do an sftp PUT command
-function opendir(path, stream, cb) {
-  log(3, 'opendir sftp entry: ' +path);
-  //return cb('');
+var isDir = function(path, stream, cb) {
+  log(3, 'isDir sftp entry: ' +path);
   var rc = stream.opendir(path, function(err) {
     if (err) {
-      log(0, 'opendir sftp ERROR: ' +path +' ' +err);
       return cb(err);
+    } else {
+      log(3, 'isdir sftp rc: ' +rc +' '+path);
+      return cb ('');
     };
-    log(3, 'opendir sftp rc: ' +rc +' '+path);
-    return cb ('');
   });
 };
-*/
 
 // do an sftp PUT command
 function upload(fpath, cb) {
@@ -297,7 +312,7 @@ function upload(fpath, cb) {
   var BN = path.basename(fpath); // remote path
   var TN = BN+myopts.partial; // temporary remote path 
   var rc;
-  log(3, 'upload entry: ' +fpath +' ' + RD +' ' + BN +' ' + TN);
+  log(3, 'upload entry: ' +fpath +' ' +RD+TN +' ' +BN +' ' +TN);
 
   // handles sftp conn. 'Not connected' error
   if (!myopts.connerr) { // stop processing if we have an sftperr
@@ -309,7 +324,6 @@ function upload(fpath, cb) {
       } else {
         log(3, 'upload sftp get stream resp:' +rc);
         if (rc !== true) log(3, 'upload sftp WARNING Consider using Continue Event');
-
         sftpstream.fastPut(fpath, RD+TN, {
             step: function ( totalTx, chunk, total ) {
             if (argv.s)
@@ -364,7 +378,7 @@ function startWatching(cb) {
       log(3, 'watcher add file: ' +fpath);
       upload(path.normalize(fpath), function(err) {
         if (err) {
-  	  log(0, 'watcher upload ERROR: ' +err);
+  	  log(0, 'watcher upload ERROR: ' +err +' ' +fpath);
         };
       });
     });

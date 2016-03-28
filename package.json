@@ -1,6 +1,6 @@
 {
   "name": "watch-putsftp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Watch a Folder and SFTP Put it to a server",
   "main": "index.js",
   "scripts": {
