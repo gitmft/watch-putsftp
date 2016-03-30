@@ -14,13 +14,23 @@ Requirements
 Install
 =======
 
+    mkdir node_modules
     npm install watch-putsftp
 
+Run
+=======
+
+    cd node_modules/watch-putsftp
+    node index.js -u clarkkent -k sftpkey -h localhost -l /Volumes/WatchDisk/ -r uploads/
+      Connecting to sFTP Server
+      sftp: ready
+      watcher: ready
 
 Features
 ===============
 
-* Auto retry if server goes down
+* Watch local folders and upload to remote sFTP server
+* Auto retry if sFTP server goes down
 * Configurable watcher, polling, filters
 * Configurable sFTP client: password or keys, keep alive
 * Flexible CLI arguments utilizing [yargs](https://www.npmjs.com/package/yargs)
@@ -50,7 +60,6 @@ var myopts = {
 ```
 
 * Default config for [ssh2](https://github.com/mscdex/ssh2)
-[chokidar](https://github.com/paulmillr/chokidar) and [ssh2](https://github.com/mscdex/ssh2)
 
 ```
 var sftpopts = {
@@ -253,6 +262,7 @@ TODO
 * Add more formal tests
 * Propogate subfolders to server
   NOTE: it s very easy and light weigth to just start another instance
+* rename with timestamps/expressions
 * other?
 
 ## Consider Contributing

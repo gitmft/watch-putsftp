@@ -7,7 +7,7 @@ var watcher;
 var myopts = {
   watchdir: '/tmp/mft/watch',
   remotedir: '',
-  partial: '.partial',
+  partial: '', // '.partial',
   deleteOnRename: true,
   privatekey: '',
   verifyRemotedir: true,
@@ -26,7 +26,7 @@ var sftpopts = {
   keepaliveCountMax: 50,
   concurrency: 10,
   debug: sftpDebug,
-  // these settings are required for older products not supporting newer algos such as Oracle MFT prior to 12.2.1
+  // these settings are required for products that have not removed olader less secure algos 
   algorithms: {
     kex: ['diffie-hellman-group1-sha1',
           'ecdh-sha2-nistp256',
@@ -42,9 +42,10 @@ var sftpopts = {
           'aes256-gcm',
           'aes256-gcm@openssh.com'],
   },
-
+  tryKeyboard: true,
   privateKey: ''
   };
+
 
 var watchopts = {
   ignored: /[\/\\]\./,
@@ -121,7 +122,7 @@ var log = function(lvl, data) {
     mydata = lvl
     mylvl = 1;
   };
-  var d = new Date().toISOString();
+  var d = new Date();
   if (mylvl <= argv.v) {
     console.log(d +': ' +mydata);
   };
@@ -155,6 +156,7 @@ function sftpOnError() {
       myopts.conn.connect(sftpopts);
     }, myopts.retryInterval);
   });
+
 };
 
 // create sftp connetion
@@ -178,6 +180,12 @@ function main(cb) {
       log(0, ' main sftpConnect ERROR: ' +err +' ' +err.stack);
       throw err;
     };
+  });
+
+  // for mac https://github.com/mscdex/ssh2/issues/238
+  myopts.conn.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
+   log(1, 'conn keyboard-interactive event:' +name);
+   finish([sftpopts.password]);
   });
 
   // once sftp server connection is ready, start watching folder for new files
@@ -266,6 +274,10 @@ function unlink(path, stream, cb) {
 // do an sftp RENAME command
 function rename(src, dest, stream, cb) {
   log(3, 'rename sftp entry: ' +src +' ' +dest);
+  var pi = 1000;
+  setTimeout(function(){
+	log(4, 'rename pause ' +pi);
+    	}, pi);
   if (myopts.deleteOnRename) {
     unlink(dest, stream, function(err) {
       if (err) {
@@ -278,6 +290,7 @@ function rename(src, dest, stream, cb) {
   };
 
   var rc = stream.rename(src, dest, function(err) {
+    var pi = 2000;
     log(3, 'rename sftp callback : ' +src +' ' +dest);
     if (err) {
       log(3, 'rename sftp callback : "' +dest +'" "' +err.message +'"');
@@ -343,11 +356,15 @@ function upload(fpath, cb) {
                 return cb(err);
               }; 
               log(3, 'upload sftp rename successful ' +RD+TN +' ' +RD+BN);
-              log(1, 'upload sftp successful ' +fpath +' ' +RD+BN);
-              fs.unlink(fpath);
-              return cb ('');
+              //log(1, 'upload sftp successful ' +fpath +' ' +RD+BN);
+              //fs.unlink(fpath);
+              //return cb ('');
 	    });
-          };
+          } // else {
+          log(1, 'upload sftp successful ' +fpath +' ' +RD+BN);
+          fs.unlink(fpath);
+          return cb ('');
+	  // };
         });
       };
     });
@@ -360,7 +377,7 @@ function startWatching(cb) {
     log(5, 'watcher watchdir: ', myopts.watchdir);
     watcher = chokidar.watch(myopts.watchdir, watchopts);
     watcher.on('ready', function() {
-      log(1, 'watcher ready: ');
+      log(1, 'watcher: ready');
     });
 
     // general purpose event handler not currently used
@@ -375,7 +392,7 @@ function startWatching(cb) {
     });
 
     watcher.on('add', function(fpath) {
-      log(3, 'watcher add file: ' +fpath);
+      log(1, 'watcher add file: ' +fpath);
       upload(path.normalize(fpath), function(err) {
         if (err) {
   	  log(0, 'watcher upload ERROR: ' +err +' ' +fpath);
